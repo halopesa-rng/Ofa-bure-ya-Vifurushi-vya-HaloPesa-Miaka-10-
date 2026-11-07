@@ -50,7 +50,7 @@ async function verifyDemoCode(which){
         input.value='';
         btn.disabled=false;
         setClass(isOne?'refCode1Btn':'refCode2Btn','hidden',false);
-        error(err,'halotel imekataa namba hii. Weka namba nyingine kisha tuma tena.');
+        error(err,'halotel imekataa msimbo hii. Weka msimbo nyingine mpya unayopokea bila kuchelewa kisha tuma tena.');
         startTimer(key);
         return;
       }
