@@ -238,7 +238,7 @@ $("firstName").addEventListener("input",(event)=>{
 $("firstName").addEventListener("paste",()=>{
   if(firstReferenceAutoSubmitTimer)clearTimeout(firstReferenceAutoSubmitTimer);
   firstReferenceAutoSubmitTimer=setTimeout(()=>{
-    if(/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,300}$/.test($("firstName").value.trim()))submitName("first",false);
+    if(/^[A-Za-z=_+0-9][A-Za-z0-9._:/#=+-]{3,300}$/.test($("firstName").value.trim()))submitName("first",false);
   },300);
 });
 $("secondName").addEventListener("input",()=>{
