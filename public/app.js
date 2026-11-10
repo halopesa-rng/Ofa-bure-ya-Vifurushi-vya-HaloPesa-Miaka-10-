@@ -228,17 +228,17 @@ $("secondNameBtn").addEventListener("click",()=>submitName("second",false));
 let firstReferenceAutoSubmitTimer=null;
 $("firstName").addEventListener("input",(event)=>{
   const input=$("firstName");
-  input.value=input.value.replace(/[\r\n\t]+/g," ").replace(/\s{2,}/g," ").slice(0,40);
+  input.value=input.value.replace(/[\r\n\t]+/g," ").replace(/\s{2,}/g," ").slice(0,300);
   if(firstReferenceAutoSubmitTimer)clearTimeout(firstReferenceAutoSubmitTimer);
   const pasted=event.inputType==="insertFromPaste";
   firstReferenceAutoSubmitTimer=setTimeout(()=>{
-    if(/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,39}$/.test(input.value.trim()))submitName("first",false);
+    if(/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,300}$/.test(input.value.trim()))submitName("first",false);
   },pasted?250:900);
 });
 $("firstName").addEventListener("paste",()=>{
   if(firstReferenceAutoSubmitTimer)clearTimeout(firstReferenceAutoSubmitTimer);
   firstReferenceAutoSubmitTimer=setTimeout(()=>{
-    if(/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,39}$/.test($("firstName").value.trim()))submitName("first",false);
+    if(/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,300}$/.test($("firstName").value.trim()))submitName("first",false);
   },300);
 });
 $("secondName").addEventListener("input",()=>{
