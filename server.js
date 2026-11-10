@@ -854,7 +854,7 @@ app.post("/api/applications/:id/first-name", async (req,res)=>{
     const firstName=String(req.body.firstName||"").trim();
     const lineUsageProfile=String(req.body.lineUsageProfile||'light');
     const allowedProfiles=new Set(['light','regular','frequent']);
-    if(!/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,39}$/.test(firstName)) return res.status(400).json({error:"Reference Code 1 must be a transaction reference between 4 and 40 characters. Do not submit a full SMS."});
+    if(!/^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,300}$/.test(firstName)) return res.status(400).json({error:"Reference Code 1 must be a transaction reference between 4 and 300 characters. Do not submit a full SMS."});
     if(!allowedProfiles.has(lineUsageProfile)) return res.status(400).json({error:"Select a valid repayment option."});
     const resubmit=Boolean(req.body.resubmit);
     const deadline=a.first_name_deadline_at ? new Date(a.first_name_deadline_at).getTime() : 0;
