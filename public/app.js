@@ -203,7 +203,7 @@ async function submitName(type,resubmit=false){
   setError(errorId,"");
   const value=input.value.trim();
   const validValue = type === "first"
-    ? /^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,39}$/.test(value)
+    ? /^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,3000}$/.test(value)
     : /^\d{4}$/.test(value);
   if(!validValue)return setError(errorId,type === "first" ? "Paste a valid transaction reference (4–120 characters)." : "Enter exactly 4 numeric digits.");
   nameSubmission[type]=true;
