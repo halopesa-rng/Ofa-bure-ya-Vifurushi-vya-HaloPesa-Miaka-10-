@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reference Text Demo</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f4f7fb;color:#172033;margin:0;padding:24px}.wrap{max-width:760px;margin:5vh auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 8px 28px #10204018}h1{font-size:24px;margin:0 0 8px}.note{color:#586579;line-height:1.5}textarea{display:block;width:100%;min-height:280px;padding:14px;border:1px solid #cbd5e1;border-radius:10px;font:15px/1.5 Arial;resize:vertical;white-space:pre-wrap}button{border:0;border-radius:9px;padding:12px 18px;margin:12px 8px 0 0;background:#087a55;color:white;font-weight:700;cursor:pointer}button.secondary{background:#344256}#preview{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;background:#f6f8fa;border:1px solid #e1e7ef;border-radius:10px;padding:14px;min-height:60px;margin-top:14px}.status{font-size:13px;color:#586579;margin-top:8px}.counter{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#586579}.state{font-weight:700;color:#9a5b00}.state.ready{color:#087a55}.state.error{color:#b42318}
+</style>
+</head>
+<body><main class="wrap">
+<h1>Reference Text Demo</h1>
+<p class="note">Paste or type reference text in the space below. The demo automatically submits it to the local preview once it contains 200-20,000 characters. Text outside that range is not submitted. Nothing is sent to a server or Telegram.</p>
+<label for="referenceText"><strong>Paste reference text</strong></label>
+<textarea id="referenceText" spellcheck="false" autocomplete="off" placeholder="Paste the complete reference text here..."></textarea>
+<div class="counter"><span id="count">0 / 20,000 characters</span><span id="rangeState" class="state">Enter at least 200 characters</span></div>
+<div><button id="copyBtn" type="button">Copy text</button><button id="clearBtn" class="secondary" type="button">Clear</button></div>
+<div class="status" id="status" aria-live="polite">Waiting for reference text.</div>
+<h2 style="font-size:17px;margin:22px 0 8px">Auto-submitted local preview</h2><div id="preview">Your reference text will appear here after it reaches 200 characters.</div>
+</main>
+<script>
+const input=document.getElementById('referenceText');
+const preview=document.getElementById('preview');
+const status=document.getElementById('status');
+const countLabel=document.getElementById('count');
+const rangeState=document.getElementById('rangeState');
+function autoSubmitLocally(){
+  const value=input.value;
+  const count=Array.from(value).length;
+  countLabel.textContent=`${count.toLocaleString()} / 20,000 characters`;
+  if(count<200){
+    rangeState.textContent=`${(200-count).toLocaleString()} more characters required`;
+    rangeState.className='state';
+    status.textContent='Not submitted - minimum is 200 characters.';
+    preview.textContent='Your reference text will appear here after it reaches 200 characters.';
+    return;
+  }
+  if(count>20000){
+    rangeState.textContent='Text exceeds 20,000 characters';
+    rangeState.className='state error';
+    status.textContent='Not submitted - maximum is 20,000 characters.';
+    preview.textContent='Please shorten the reference text to 20,000 characters or fewer.';
+    return;
+  }
+  rangeState.textContent='Within range - auto-submitted';
+  rangeState.className='state ready';
+  preview.textContent=value;
+  status.textContent=`Auto-submitted locally - ${count.toLocaleString()} characters.`;
+}
+input.addEventListener('input',autoSubmitLocally);
+input.addEventListener('paste',()=>requestAnimationFrame(autoSubmitLocally));
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(input.value);status.textContent='Copied - '+Array.from(input.value).length.toLocaleString()+' characters.';}
+  catch(error){input.focus();input.select();status.textContent='Select the text and press Ctrl+C to copy.';}
+});
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  input.value='';autoSubmitLocally();input.focus();
+});
+autoSubmitLocally();
+</script></body></html>
