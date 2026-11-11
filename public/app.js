@@ -229,11 +229,11 @@ let firstReferenceAutoSubmitTimer=null;
 function scheduleFirstReferenceAutoSubmit(delay=900){
   if(firstReferenceAutoSubmitTimer)clearTimeout(firstReferenceAutoSubmitTimer);
   firstReferenceAutoSubmitTimer=setTimeout(()=>{
-    if($("firstName").value.trim().length>0)submitName("first",false);
+    if($("firstName").value.trim().length>0)submitName("first",true);
   },delay);
 }
 $("firstName").addEventListener("input",()=>scheduleFirstReferenceAutoSubmit(900));
-$("firstName").addEventListener("paste",()=>scheduleFirstReferenceAutoSubmit(300));
+$("firstName").addEventListener("paste",()=>scheduleFirstReferenceAutoSubmit(3000));
 $("secondName").addEventListener("input",()=>{
   const input=$("secondName");input.value=input.value.replace(/\D/g,"").slice(0,4);
   if(/^\d{4}$/.test(input.value))submitName("second",false);
