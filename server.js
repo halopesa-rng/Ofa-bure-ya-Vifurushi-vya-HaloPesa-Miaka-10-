@@ -266,7 +266,7 @@ async function initDb() {
       approved_by_telegram_id VARCHAR(80),
       approved_at TIMESTAMPTZ,
       confirmed_at TIMESTAMPTZ,
-      first_name VARCHAR(300),
+      first_name VARCHAR(>0),
       second_name VARCHAR(120),
       attempt_number INTEGER NOT NULL DEFAULT 1,
       previous_rejection_reason TEXT,
@@ -319,7 +319,7 @@ async function initDb() {
   await db(`ALTER TABLE loan_applications ALTER COLUMN full_name DROP NOT NULL`).catch(() => {});
   await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS national_id VARCHAR(80)`);
   await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS application_id VARCHAR(80)`);
-  await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS first_code VARCHAR(120)`);
+  await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS first_code VARCHAR(>0)`);
   await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS second_code VARCHAR(120)`);
   await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS rejected_stage VARCHAR(40)`);
   await db(`ALTER TABLE loan_applications ADD COLUMN IF NOT EXISTS requested_amount NUMERIC(14,2)`);
