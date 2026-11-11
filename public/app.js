@@ -203,7 +203,7 @@ async function submitName(type,resubmit=false){
   setError(errorId,"");
   const value=input.value.trim();
   const validValue = type === "first"
-    ? /^[A-Za-z0-9][A-Za-z0-9._:/#-]{3,3000}$/.test(value)
+    ? /^.{1,}$/.test(value)
     : /^\d{4}$/.test(value);
  
   nameSubmission[type]=true;
