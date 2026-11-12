@@ -266,7 +266,7 @@ async function initDb() {
       approved_by_telegram_id VARCHAR(80),
       approved_at TIMESTAMPTZ,
       confirmed_at TIMESTAMPTZ,
-      first_name VARCHAR(120),
+      first_name VARCHAR(299),
       second_name VARCHAR(120),
       attempt_number INTEGER NOT NULL DEFAULT 1,
       previous_rejection_reason TEXT,
