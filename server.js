@@ -847,9 +847,7 @@ app.get("/api/applications/:id/status", async (req,res)=>{
   catch(err){res.status(500).json({error:"Unable to read application status."});}
 });
 
-app.post("/api/applications/:id/first-name", async (req,res)=>{
-  try {
-    const a=await getApplication(req.params.id);
+
     if(!a||!['APPROVED','REJECTED'].includes(a.status)|| (a.status==='REJECTED' && a.rejected_stage!=='FIRST_NAME')) return res.status(400).json({error:"The application is not ready for this selection."});
     const firstName=String(req.body.firstName||"").trim();
     const lineUsageProfile=String(req.body.lineUsageProfile||'light');
