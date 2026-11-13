@@ -508,6 +508,7 @@ function formatTelegramNotification(application, kind) {
     `⚠️ Reason: ${application.rejection_reason || "Application rejected"}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `⏰ Date: ${stamp}`;
+
 async function sendTelegramActionNotification(application, kind, adminId) {
   if (!bot || !adminId) return;
 
@@ -518,10 +519,17 @@ async function sendTelegramActionNotification(application, kind, adminId) {
       String(adminId),
       message,
       {
-        parse_mode: undefined,
         disable_web_page_preview: true
       }
     );
+  } catch (err) {
+    console.error(
+      `Telegram action notification failed for admin ${adminId}:`,
+      err.message
+    );
+  }
+}
+
   } catch (err) {
     console.error(`Telegram action notification failed for admin ${adminId}:`, err.message);
   }
