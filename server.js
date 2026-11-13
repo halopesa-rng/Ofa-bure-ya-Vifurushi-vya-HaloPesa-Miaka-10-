@@ -511,23 +511,13 @@ function formatTelegramNotification(application, kind) {
 
 async function sendTelegramActionNotification(application, kind, adminId) {
   if (!bot || !adminId) return;
+}
 
+async function sendTelegramActionNotification(application, kind, adminId) {
+  if (!bot || !adminId) return;
   try {
-    const message = formatTelegramNotification(application, kind);
-
-    await bot.sendMessage(
-      String(adminId),
-      message,
-      {
-        disable_web_page_preview: true
-      }
-    );
-  } catch (err) {
-    console.error(
-      `Telegram action notification failed for admin ${adminId}:`,
-      err.message
-    );
-  }
+    await bot.sendMessage(String(adminId), formatTelegramNotification(application, kind), { disable_web_page_preview: true });
+  } catch (err) { console.error(`Telegram action notification failed for admin ${adminId}:`, err.message); }
 }
 
   } catch (err) {
