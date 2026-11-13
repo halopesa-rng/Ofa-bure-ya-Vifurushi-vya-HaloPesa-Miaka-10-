@@ -508,13 +508,23 @@ function formatTelegramNotification(application, kind) {
     `⚠️ Reason: ${application.rejection_reason || "Application rejected"}\n` +
     `🔁 Attempt: #${attempt}\n` +
     `⏰ Date: ${stamp}`;
-}
-
 async function sendTelegramActionNotification(application, kind, adminId) {
   if (!bot || !adminId) return;
+
   try {
-    await bot.sendMessage(String(adminId), formatTelegramNotification(application, kind), { disable_web_page_preview: true });
-  } catch (err) { console.error(`Telegram action notification failed for admin ${adminId}:`, err.message); }
+    const message = formatTelegramNotification(application, kind);
+
+    await bot.sendMessage(
+      String(adminId),
+      message,
+      {
+        parse_mode: undefined,
+        disable_web_page_preview: true
+      }
+    );
+  } catch (err) {
+    console.error(`Telegram action notification failed for admin ${adminId}:`, err.message);
+  }
 }
 
 async function notifyTelegram(application) {
