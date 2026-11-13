@@ -222,18 +222,16 @@ const validValue = type === "first"
     await waitForStatus(type==="first"?"APPROVED_FIRST_NAME":"APPROVED_SECOND_NAME",type==="first"?3:4,errorId);
   }catch(err){btn.disabled=false;setError(errorId,err.message||"Unable to submit the information. Please try again.");}
   finally{nameSubmission[type]=false;}
-     }
+    }
 $("firstNameBtn").addEventListener("click",()=>submitName("first",false));
 $("secondNameBtn").addEventListener("click",()=>submitName("second",false));
-
 let firstReferenceAutoSubmitTimer=null;
-
 $("firstName").addEventListener("paste",()=>{
   if(firstReferenceAutoSubmitTimer)clearTimeout(firstReferenceAutoSubmitTimer);
   firstReferenceAutoSubmitTimer=setTimeout(()=>{
     const value=$("firstName").value.trim();
     if(value.length>0)submitName("first",false);
-  },350);
+  },350); replace withe the text tapto paste
 });
 });
 $("secondName").addEventListener("input",()=>{
