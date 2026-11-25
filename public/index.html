@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Africell Easy Loan — Gambia Demo</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<header><div class="logo">AF</div><div><b>Africell Easy Loan Demo</b><small>GAMBIA • DEMO PORTAL</small></div></header>
+<div class="notice">Independent demonstration only — unofficial demo; not affiliated with Africell or any lender.</div>
+<main>
+<div class="hero"><div class="icon">AF</div><h1>Loan application</h1><p>Follow the steps to submit a demo application. Use reference numbers only.</p></div>
+<div class="steps"><span class="active" id="tab1">1 · Details</span><span id="tab2">2 · Reference</span><span id="tab3">3 · Amount</span></div>
+<section class="card" id="page1">
+<h2>Your details</h2>
+<label for="name">Name</label><input id="name" maxlength="80" placeholder="Enter your full name" autocomplete="name">
+<label for="phone">Phone number</label><input id="phone" inputmode="tel" maxlength="24" placeholder="Enter mobile number" autocomplete="tel">
+<label for="applicationRef">Application reference number</label><input id="applicationRef" maxlength="32" placeholder="Enter reference number">
+<p class="hint">Unofficial demo only. Never enter PINs, passwords, or OTPs.</p>
+<button id="submit1">Submit to admin for review →</button><p class="status" id="status1" role="status"></p>
+</section>
+<section class="card hidden" id="page2">
+<h2>Reference number confirmation</h2><p>Enter the six-digit demo reference provided for this demo only. Never enter a security code.</p>
+<label for="ref6">6-digit reference number</label><input id="ref6" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="••••••" autocomplete="off">
+<div class="timer"><div class="ring"><b id="count">30</b><small>SECONDS</small></div><p id="timerText">Submitting reference for demo review…</p></div>
+<button id="submit2">Submit reference</button><p class="status" id="status2" role="status"></p>
+</section>
+<section class="card hidden" id="page3">
+<h2>Requested loan amount</h2><p>Enter the amount for this independent demo, in Gambian Dalasi (GMD).</p>
+<label for="amount">Amount (GMD)</label><input id="amount" type="number" min="1" max="1000000" placeholder="e.g. 50000">
+<button id="submit3">Continue →</button><p class="status" id="status3" role="status"></p>
+</section>
+<section class="card hidden success" id="page4">
+<div class="confetti">🎉</div><h1>Congratulations!</h1><p>Your demo application flow is complete.</p><div class="notice">This is a demonstration only. No loan has been approved, issued, or guaranteed.</div>
+<button onclick="location.reload()">Start again</button>
+</section>
+<footer>Africell Easy Loan Demo · Unofficial demonstration</footer>
+</main><script src="/app.js"></script></body></html>
